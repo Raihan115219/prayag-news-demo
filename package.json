@@ -1,0 +1,17 @@
+{
+  "name": "prayag-news",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Prayag News — frontend demo of a local news publishing platform for Prayagraj (reporter → editor → public workflow).",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.3.5",
+    "tailwindcss": "^4.3.5",
+    "vite": "^8.3.8"
+  }
+}

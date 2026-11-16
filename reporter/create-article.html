@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Create Article — Reporter Desk · Prayag News</title>
+    <meta name="robots" content="noindex" />
+    <meta name="theme-color" content="#171717" />
+    <link rel="icon" href="/assets/icons/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/css/input.css" />
+  </head>
+  <body class="bg-cream">
+    <div id="panel-header" class="min-h-16"></div>
+    <main id="main" tabindex="-1" class="mx-auto max-w-[1320px] px-4 pb-28 pt-6 sm:px-6 sm:pt-8 lg:px-8 lg:pb-16">
+      <div class="flex flex-wrap items-center justify-between gap-3">
+        <a href="%BASE_URL%reporter/dashboard.html" class="inline-flex items-center gap-1.5 text-[13px] font-medium text-muted hover:text-ink">
+          <svg viewBox="0 0 24 24" class="size-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5m6-6-6 6 6 6"/></svg>
+          Back to My Articles
+        </a>
+        <p id="save-state" class="text-[12.5px] text-muted" aria-live="polite"></p>
+      </div>
+
+      <div class="mt-4 flex flex-wrap items-center gap-3">
+        <h1 id="form-title" class="text-[26px] font-semibold tracking-tight sm:text-[30px]">Create New Article</h1>
+        <span id="form-status"></span>
+      </div>
+
+      <div id="rejection-banner"></div>
+      <div id="locked-banner"></div>
+
+      <form id="article-form" class="mt-6 grid gap-6 lg:grid-cols-12" novalidate>
+        <!-- Main column -->
+        <div class="space-y-6 lg:col-span-8">
+          <div class="panel-card space-y-6 p-5 sm:p-7">
+            <div data-field="title">
+              <div class="flex items-baseline justify-between">
+                <label for="title" class="field-label">Article Title <span class="text-accent">*</span></label>
+                <span class="text-[11.5px] text-muted" data-count="title">0/140</span>
+              </div>
+              <input id="title" name="title" maxlength="140" class="field-input !py-3 !text-[19px] font-semibold" placeholder="Write a clear, specific headline" autocomplete="off" />
+              <p class="field-error">Please add a headline (at least 10 characters).</p>
+            </div>
+
+            <div data-field="subtitle">
+              <div class="flex items-baseline justify-between">
+                <label for="subtitle" class="field-label">Subtitle <span class="text-accent">*</span></label>
+                <span class="text-[11.5px] text-muted" data-count="subtitle">0/240</span>
+              </div>
+              <textarea id="subtitle" name="subtitle" maxlength="240" rows="2" class="field-input resize-none" placeholder="One or two lines that summarise the story"></textarea>
+              <p class="field-error">Please add a short subtitle.</p>
+            </div>
+
+            <div class="grid gap-6 sm:grid-cols-2">
+              <div data-field="category">
+                <label for="category" class="field-label">Category <span class="text-accent">*</span></label>
+                <div class="relative">
+                  <select id="category" name="category" class="field-input appearance-none pr-10"></select>
+                  <svg viewBox="0 0 24 24" class="pointer-events-none absolute inset-y-0 right-3 my-auto size-[18px] text-muted" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+                </div>
+                <p class="field-error">Please choose a category.</p>
+              </div>
+              <div data-field="location">
+                <label for="location" class="field-label">Location / City Tag <span class="text-accent">*</span></label>
+                <input id="location" name="location" list="location-options" class="field-input" placeholder="e.g. Civil Lines, Prayagraj" autocomplete="off" />
+                <datalist id="location-options"></datalist>
+                <p class="field-error">Please add where this story is from.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Image -->
+          <div class="panel-card p-5 sm:p-7" data-field="image">
+            <div class="flex items-baseline justify-between">
+              <p class="field-label !mb-0" id="image-label">Main Image <span class="text-accent">*</span></p>
+              <span class="text-[11.5px] text-muted">JPG, PNG or WebP · up to 8 MB</span>
+            </div>
+            <input id="image-input" type="file" accept="image/jpeg,image/png,image/webp" class="sr-only" aria-labelledby="image-label" />
+            <div id="image-zone" class="mt-3"></div>
+            <p class="field-error">Please add a main image for the story.</p>
+          </div>
+
+          <!-- Body -->
+          <div class="panel-card p-5 sm:p-7" data-field="body">
+            <div class="flex items-baseline justify-between">
+              <p class="field-label !mb-0" id="body-label">Article Body <span class="text-accent">*</span></p>
+              <span class="text-[11.5px] text-muted" id="word-count">0 words</span>
+            </div>
+            <div class="editor-shell mt-3 overflow-hidden rounded-xl border border-line focus-within:border-ink focus-within:ring-4 focus-within:ring-ink/5">
+              <div class="flex flex-wrap items-center gap-0.5 border-b border-line bg-cream/60 px-2 py-1.5" role="toolbar" aria-label="Text formatting" id="toolbar">
+                <button type="button" data-cmd="bold" class="tb-btn" title="Bold (Ctrl+B)" aria-label="Bold"><b>B</b></button>
+                <button type="button" data-cmd="italic" class="tb-btn" title="Italic (Ctrl+I)" aria-label="Italic"><i class="font-serif">I</i></button>
+                <span class="mx-1 h-5 w-px bg-line" aria-hidden="true"></span>
+                <button type="button" data-block="h2" class="tb-btn text-[12.5px] font-bold" title="Sub-heading" aria-label="Sub-heading">H2</button>
+                <button type="button" data-block="p" class="tb-btn text-[12.5px]" title="Normal paragraph" aria-label="Normal paragraph">¶</button>
+                <button type="button" data-block="blockquote" class="tb-btn" title="Quote" aria-label="Quote">
+                  <svg viewBox="0 0 24 24" class="size-4" fill="currentColor" aria-hidden="true"><path d="M7 7h4v4H8c0 2 1 3 3 3v2c-3 0-5-2-5-5V7Zm8 0h4v4h-3c0 2 1 3 3 3v2c-3 0-5-2-5-5V7Z"/></svg>
+                </button>
+                <span class="mx-1 h-5 w-px bg-line" aria-hidden="true"></span>
+                <button type="button" data-cmd="insertUnorderedList" class="tb-btn" title="Bulleted list" aria-label="Bulleted list">
+                  <svg viewBox="0 0 24 24" class="size-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M9 6h11M9 12h11M9 18h11"/><circle cx="4.5" cy="6" r="1" fill="currentColor"/><circle cx="4.5" cy="12" r="1" fill="currentColor"/><circle cx="4.5" cy="18" r="1" fill="currentColor"/></svg>
+                </button>
+                <button type="button" data-cmd="insertOrderedList" class="tb-btn" title="Numbered list" aria-label="Numbered list">
+                  <svg viewBox="0 0 24 24" class="size-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M10 6h10M10 12h10M10 18h10M4 5h1.5v4M4 9h3M4 14.5c.5-.8 2.5-.8 2.5.5S4 17 4 19h3"/></svg>
+                </button>
+              </div>
+              <div id="body-editor" class="editor-surface article-body !text-[16px] px-4 py-4 sm:px-5" contenteditable="true" role="textbox" aria-multiline="true" aria-labelledby="body-label" data-placeholder="Write the full story here. Use H2 for sub-headings and the quote button for quotes from people you spoke to…"></div>
+            </div>
+            <p class="field-hint">Paste plain text from your notes — formatting is cleaned automatically. Hindi and English are both supported.</p>
+            <p class="field-error">The story body is too short (at least 40 words).</p>
+          </div>
+        </div>
+
+        <!-- Sidebar -->
+        <aside class="lg:col-span-4">
+          <div class="space-y-4 lg:sticky lg:top-24">
+            <div class="panel-card p-5">
+              <h2 class="text-[15px] font-semibold">Publishing</h2>
+              <p class="mt-1 text-[13px] leading-relaxed text-muted">Save a draft any time. When the story is ready, submit it — the Head Editor will review it before it goes live.</p>
+              <ul id="checklist" class="mt-4 space-y-2 text-[13px]"></ul>
+              <div class="mt-5 hidden gap-2 lg:grid" id="actions-desktop">
+                <button type="button" data-action="submit" class="btn btn-primary !py-3">Submit for Approval</button>
+                <button type="button" data-action="draft" class="btn btn-outline !py-3">Save Draft</button>
+              </div>
+            </div>
+            <div class="panel-card p-5 text-[13px] leading-relaxed text-muted">
+              <p class="font-semibold text-ink">Desk guidelines</p>
+              <ul class="mt-2 list-disc space-y-1 pl-4">
+                <li>Name your sources and quote officials accurately.</li>
+                <li>Use a landscape photo you took or have rights to.</li>
+                <li>Keep the headline under 100 characters for mobile readers.</li>
+              </ul>
+            </div>
+          </div>
+        </aside>
+      </form>
+    </main>
+
+    <!-- Mobile sticky action bar -->
+    <div id="actions-mobile" class="fixed inset-x-0 bottom-0 z-30 grid grid-cols-2 gap-2 border-t border-line bg-white/95 p-3 backdrop-blur lg:hidden">
+      <button type="button" data-action="draft" class="btn btn-outline !py-3">Save Draft</button>
+      <button type="button" data-action="submit" class="btn btn-primary !py-3">Submit</button>
+    </div>
+
+    <style>
+      .tb-btn { display: inline-grid; place-items: center; min-width: 34px; height: 32px; padding: 0 8px; border-radius: 8px; color: #444; font-size: 14px; }
+      .tb-btn:hover { background: #fff; color: #171717; }
+      .tb-btn[aria-pressed="true"] { background: #171717; color: #fff; }
+    </style>
+    <script type="module" src="/js/article-form.js"></script>
+  </body>
+</html>

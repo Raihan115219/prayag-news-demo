@@ -1,0 +1,251 @@
+@import "tailwindcss";
+
+/* ------------------------------------------------------------------
+   Prayag News — design tokens
+   ------------------------------------------------------------------ */
+@theme {
+  --color-ink: #171717;
+  --color-ink-2: #2a2a2a;
+  --color-paper: #ffffff;
+  --color-cream: #f5f5f3;
+  --color-accent: #f04418;
+  --color-accent-dark: #d63a12;
+  --color-crimson: #d92332;
+  --color-muted: #777777;
+  --color-line: #e8e8e8;
+
+  --font-sans: "Inter", "Noto Sans Devanagari", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-deva: "Noto Sans Devanagari", "Inter", ui-sans-serif, sans-serif;
+
+  --radius-card: 1.5rem;
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+  }
+  body {
+    @apply bg-paper text-ink font-sans;
+    font-feature-settings: "cv11", "ss01";
+  }
+  /* Hindi copy: Devanagari needs more vertical room and no negative tracking */
+  :lang(hi) {
+    font-family: var(--font-deva);
+    letter-spacing: 0 !important;
+  }
+  h1:lang(hi), h2:lang(hi), h3:lang(hi), .headline:lang(hi) {
+    line-height: 1.38 !important;
+  }
+  ::selection { background: #f0441833; }
+  :focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+    border-radius: 6px;
+  }
+  img { background: var(--color-cream); }
+}
+
+@layer components {
+  .container-page {
+    @apply mx-auto w-full max-w-[1240px] px-4 sm:px-6 lg:px-8;
+  }
+
+  .headline {
+    letter-spacing: -0.022em;
+    line-height: 1.14;
+    text-wrap: balance;
+  }
+
+  /* Section label like "Latest News" */
+  .section-title {
+    @apply text-[22px] sm:text-[26px] font-semibold text-ink;
+    letter-spacing: -0.025em;
+  }
+
+  .kicker {
+    @apply text-[11px] font-semibold uppercase tracking-[0.12em] text-accent;
+  }
+
+  .pill-link {
+    @apply inline-flex items-center gap-2 rounded-full bg-accent py-1.5 pl-4 pr-1.5 text-[13px] font-medium text-white transition-colors hover:bg-accent-dark;
+  }
+  .pill-link .pill-icon {
+    @apply grid size-6 place-items-center rounded-full bg-white/20;
+  }
+
+  /* --------------------------------------------------------------
+     Notched corner (signature of the reference design):
+     a cut-out at the bottom-right of an image holding an arrow button.
+     Set --notch-bg to the surface colour behind the card.
+     -------------------------------------------------------------- */
+  .notch {
+    --r: 18px;
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    padding: 7px 0 0 7px;
+    background: var(--notch-bg, #fff);
+    border-top-left-radius: var(--r);
+    /* 1px halo hides sub-pixel seams between the notch and its curved corners */
+    box-shadow: 0 0 0 1px var(--notch-bg, #fff);
+    z-index: 2;
+  }
+  .notch::before,
+  .notch::after {
+    content: "";
+    position: absolute;
+    width: var(--r);
+    height: var(--r);
+    background: radial-gradient(circle at 0 0, transparent calc(var(--r) - 0.5px), var(--notch-bg, #fff) var(--r));
+    pointer-events: none;
+  }
+  .notch::before { top: calc(var(--r) * -1); right: 0; }
+  .notch::after { left: calc(var(--r) * -1); bottom: 0; }
+  .notch-lg { --r: 26px; padding: 10px 0 0 10px; }
+  .notch-sm { --r: 14px; padding: 5px 0 0 5px; }
+
+  .arrow-btn {
+    @apply grid place-items-center rounded-xl bg-ink text-white transition-transform duration-300;
+  }
+  .group:hover .arrow-btn { transform: rotate(45deg); }
+
+  /* Card image zoom on hover — subtle */
+  .img-zoom { transition: transform 700ms cubic-bezier(.2,.7,.2,1); }
+  .group:hover .img-zoom { transform: scale(1.035); }
+
+  /* Status badges */
+  .badge {
+    @apply inline-flex items-center gap-1.5 whitespace-nowrap rounded-full px-2.5 py-1 text-[12px] font-medium leading-none;
+  }
+  .badge::before {
+    content: "";
+    @apply size-1.5 rounded-full bg-current;
+  }
+
+  /* Buttons */
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold transition-colors duration-150 disabled:cursor-not-allowed disabled:opacity-50;
+  }
+  /* Always combine with .btn, e.g. class="btn btn-primary" */
+  .btn-primary { @apply bg-accent text-white hover:bg-accent-dark; }
+  .btn-dark { @apply bg-ink text-white hover:bg-ink-2; }
+  .btn-outline { @apply border border-line bg-white text-ink hover:border-ink/30 hover:bg-cream; }
+  .btn-danger { @apply border border-crimson/25 bg-white text-crimson hover:bg-crimson/5; }
+  .btn-ghost { @apply text-ink hover:bg-cream; }
+
+  /* Forms */
+  .field-label { @apply mb-1.5 block text-[13px] font-semibold text-ink; }
+  .field-hint { @apply mt-1.5 text-[12px] text-muted; }
+  .field-error { @apply mt-1.5 hidden text-[12px] font-medium text-crimson; }
+  .field-input {
+    @apply block w-full rounded-xl border border-line bg-white px-3.5 py-2.5 text-[15px] text-ink placeholder:text-[#a3a3a3] transition-colors focus:border-ink focus:outline-none focus:ring-4 focus:ring-ink/5;
+  }
+  .has-error .field-input,
+  .has-error .editor-shell,
+  .has-error .dropzone { @apply border-crimson; }
+  .has-error .field-error { @apply block; }
+
+  /* Panel cards */
+  .panel-card { @apply rounded-2xl border border-line bg-white; }
+
+  /* Skeleton loading */
+  .skeleton {
+    background: linear-gradient(90deg, #efefec 0%, #f7f7f5 50%, #efefec 100%);
+    background-size: 200% 100%;
+    animation: skeleton 1.3s ease-in-out infinite;
+    border-radius: 14px;
+  }
+
+  /* Horizontal scroller without visible scrollbar (mobile nav) */
+  .no-scrollbar { scrollbar-width: none; }
+  .no-scrollbar::-webkit-scrollbar { display: none; }
+
+  @media (max-width: 639px) {
+    .nav-fade {
+      mask-image: linear-gradient(90deg, #000 0, #000 calc(100% - 36px), transparent 100%);
+    }
+  }
+}
+
+/* ------------------------------------------------------------------
+   Article body typography (public page + editor preview)
+   ------------------------------------------------------------------ */
+.article-body {
+  font-size: 1.0625rem;
+  line-height: 1.8;
+  color: #262626;
+}
+@media (min-width: 768px) {
+  .article-body { font-size: 1.1875rem; }
+}
+.article-body:lang(hi), .article-body :lang(hi) { line-height: 1.95; }
+.article-body > * + * { margin-top: 1.35em; }
+.article-body h2 {
+  font-size: 1.4em;
+  font-weight: 700;
+  line-height: 1.3;
+  letter-spacing: -0.015em;
+  color: var(--color-ink);
+  margin-top: 1.8em;
+}
+.article-body h3 { font-size: 1.15em; font-weight: 700; color: var(--color-ink); margin-top: 1.6em; }
+.article-body strong, .article-body b { font-weight: 650; color: var(--color-ink); }
+.article-body ul, .article-body ol { padding-left: 1.4em; }
+.article-body ul { list-style: disc; }
+.article-body ol { list-style: decimal; }
+.article-body li + li { margin-top: 0.4em; }
+.article-body li::marker { color: var(--color-accent); }
+.article-body blockquote {
+  border-left: 3px solid var(--color-accent);
+  padding: 0.2em 0 0.2em 1.1em;
+  font-size: 1.12em;
+  font-weight: 500;
+  color: var(--color-ink);
+}
+.article-body > p:first-child::first-letter {
+  float: left;
+  font-size: 3.4em;
+  line-height: 0.9;
+  font-weight: 700;
+  padding: 0.08em 0.12em 0 0;
+  color: var(--color-ink);
+}
+.article-body:lang(hi) > p:first-child::first-letter { float: none; font-size: inherit; padding: 0; font-weight: inherit; }
+
+/* Rich text editor surface */
+.editor-surface { min-height: 320px; outline: none; }
+.editor-surface:empty::before { content: attr(data-placeholder); color: #a3a3a3; }
+.editor-surface > * + * { margin-top: 0.9em; }
+.editor-surface h2 { font-size: 1.3em; font-weight: 700; }
+.editor-surface ul { list-style: disc; padding-left: 1.3em; }
+.editor-surface ol { list-style: decimal; padding-left: 1.3em; }
+.editor-surface blockquote { border-left: 3px solid var(--color-accent); padding-left: 1em; color: var(--color-ink); }
+
+/* Toasts */
+.toast-enter { animation: toast-in 260ms cubic-bezier(.2,.8,.2,1); }
+.toast-leave { animation: toast-out 200ms ease-in forwards; }
+
+/* Modal */
+.modal-backdrop { animation: fade-in 160ms ease-out; }
+.modal-panel { animation: pop-in 200ms cubic-bezier(.2,.8,.2,1); }
+
+/* Fade-in for freshly rendered content */
+.fade-in { animation: fade-in 320ms ease-out; }
+
+/* Broken image fallback */
+.img-fallback {
+  background: linear-gradient(135deg, #efefec, #e3e3df);
+  color: transparent;
+}
+
+@keyframes skeleton { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+@keyframes toast-in { from { opacity: 0; transform: translateY(10px) scale(.98); } to { opacity: 1; transform: none; } }
+@keyframes toast-out { to { opacity: 0; transform: translateY(6px); } }
+@keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
+@keyframes pop-in { from { opacity: 0; transform: translateY(8px) scale(.98); } to { opacity: 1; transform: none; } }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 1ms !important; transition-duration: 1ms !important; }
+}
