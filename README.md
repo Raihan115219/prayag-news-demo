@@ -29,9 +29,10 @@ npm run preview    # http://localhost:5180/prayag-news-demo/
 
 ### Deployment (GitHub Pages)
 
-Every push to `main` runs `.github/workflows/deploy.yml`, which builds the site and
-publishes `dist/` to GitHub Pages. The repository's **Settings → Pages → Source** must be
-set to **GitHub Actions**.
+Every push to `main` runs `.github/workflows/deploy.yml`. It builds the site and pushes
+the finished files (`dist/`) to the **`gh-pages`** branch. In **Settings → Pages**, set
+**Source** to **Deploy from a branch**, then pick branch **`gh-pages`** and folder **`/ (root)`**.
+Do not pick `main`: that branch holds the source files, which do not run without the build step.
 
 Builds use the base path `/prayag-news-demo/` (see `vite.config.js`). All internal links
 go through `js/paths.js`. To host at a domain root instead, build with `BASE_PATH=/ npm run build`.
